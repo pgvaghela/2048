@@ -1,11 +1,13 @@
 package frontend;
 
-import javax.swing.*;
-import java.awt.*;
 import backend.GameLogic;
+import java.awt.*;
+import javax.swing.*;
 
 public class GameUI extends JFrame {
-    private GameLogic gameLogic;
+    private final GameLogic gameLogic;
+    private JPanel gamePanel;
+    private JLabel scoreLabel;
 
     public GameUI() {
         gameLogic = new GameLogic();
@@ -14,15 +16,21 @@ public class GameUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        add(createGamePanel(), BorderLayout.CENTER);
+        gamePanel = createGamePanel();
+        add(gamePanel, BorderLayout.CENTER);
         add(createScorePanel(), BorderLayout.NORTH);
 
+        InputHandler inputHandler = new InputHandler(gameLogic, this::refresh);
+        addKeyListener(inputHandler);
+
+        setFocusable(true);
         setVisible(true);
     }
 
     private JPanel createGamePanel() {
         JPanel panel = new JPanel(new GridLayout(4, 4));
         int[][] grid = gameLogic.getGrid();
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 panel.add(new Tile(grid[i][j]));
@@ -33,8 +41,24 @@ public class GameUI extends JFrame {
 
     private JPanel createScorePanel() {
         JPanel panel = new JPanel();
-        JLabel scoreLabel = new JLabel("Score: 0");
+        scoreLabel = new JLabel("Score: " + gameLogic.getScore());
         panel.add(scoreLabel);
         return panel;
     }
+
+    private void refresh() {
+        System.out.println("Refreshing UI...");
+        int[][] grid = gameLogic.getGrid();
+        Component[] components = gamePanel.getComponents();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                int componentIndex = i * grid.length + j;
+                Tile tile = (Tile) components[componentIndex];
+                tile.setValue(grid[i][j]); // Update tile value
+            }
+        }
+        scoreLabel.setText("Score: " + gameLogic.getScore());
+        gamePanel.repaint();
+    }        
+
 }
