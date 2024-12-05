@@ -3,19 +3,27 @@ package backend;
 import java.io.Serializable;
 
 public class GameState implements Serializable {
-    private int[][] grid;
-    private int score;
+    private final int[][] grid;
+    private final int score;
 
     public GameState(int[][] grid, int score) {
-        this.grid = grid;
+        this.grid = copyGrid(grid);
         this.score = score;
     }
 
     public int[][] getGrid() {
-        return grid;
+        return copyGrid(grid);
     }
 
     public int getScore() {
         return score;
+    }
+
+    private int[][] copyGrid(int[][] source) {
+        int[][] copy = new int[source.length][source[0].length];
+        for (int i = 0; i < source.length; i++) {
+            System.arraycopy(source[i], 0, copy[i], 0, source[i].length);
+        }
+        return copy;
     }
 }

@@ -3,7 +3,7 @@ package backend;
 import java.util.Random;
 
 public final class GameLogic {
-    private int[][] grid;
+    private final int[][] grid;
     private static final int SIZE = 4;
     private Random random;
     private int score;
@@ -24,98 +24,76 @@ public final class GameLogic {
         return score;
     }
 
-    public boolean move(String direction) {
-        System.out.println("Before move (" + direction + "):");
-        printGrid();
-        boolean moved = switch (direction) {
-            case "UP" -> moveUp();
-            case "DOWN" -> moveDown();
-            case "LEFT" -> moveLeft();
-            case "RIGHT" -> moveRight();
-            default -> false;
-        };
-        if (moved) {
-            addRandomTile();
-            System.out.println("After move (" + direction + "):");
-            printGrid();
+    public void up() {
+        for (int col = 0; col < SIZE; col++) {
+            moveColumn(col, -1);
         }
-        return moved;
+        finalizeMove();
     }
 
-    private void printGrid() {
-        for (int[] row : grid) {
-            for (int val : row) {
-                System.out.print(val + " ");
-            }
-            System.out.println();
+    public void down() {
+        for (int col = 0; col < SIZE; col++) {
+            moveColumn(col, 1);
         }
-        System.out.println();
+        finalizeMove();
     }
 
-    private boolean moveUp() {
-        return slideAndMerge(0, 1, 0, SIZE);
+    public void left() {
+        for (int row = 0; row < SIZE; row++) {
+            moveRow(row, -1);
+        }
+        finalizeMove();
     }
 
-    private boolean moveDown() {
-        return slideAndMerge(SIZE - 1, -1, 0, SIZE);
+    public void right() {
+        for (int row = 0; row < SIZE; row++) {
+            moveRow(row, 1);
+        }
+        finalizeMove();
     }
 
-    private boolean moveLeft() {
-        return slideAndMerge(0, SIZE, 0, 1);
+    private void moveColumn(int col, int direction) {
+        int[] column = new int[SIZE];
+        for (int row = 0; row < SIZE; row++) {
+            column[row] = grid[row][col];
+        }
+        merge(column, direction);
+        for (int row = 0; row < SIZE; row++) {
+            grid[row][col] = column[row];
+        }
     }
 
-    private boolean moveRight() {
-        return slideAndMerge(0, SIZE, SIZE - 1, -1);
+    private void moveRow(int row, int direction) {
+        int[] line = grid[row];
+        merge(line, direction);
+        grid[row] = line;
     }
 
-    private boolean slideAndMerge(int rowStart, int rowInc, int colStart, int colInc) {
-        boolean changed = false;
-        for (int i = 0; i < SIZE; i++) { // Iterate over rows/columns
-            int[] line = new int[SIZE];
-            int index = 0;
-    
-            // Extract line from grid
-            for (int j = 0; j < SIZE; j++) {
-                int row = rowStart + (rowInc == 0 ? i : j); // Ensure row index is valid
-                int col = colStart + (colInc == 0 ? i : j); // Ensure col index is valid
-                if (row >= 0 && row < SIZE && col >= 0 && col < SIZE) {
-                    if (grid[row][col] != 0) {
-                        line[index++] = grid[row][col];
-                    }
-                }
-            }
-    
-            // Merge tiles
-            index = 0;
-            int[] mergedLine = new int[SIZE];
-            for (int j = 0; j < SIZE; j++) {
-                if (line[j] == 0) break;
-                if (j < SIZE - 1 && line[j] == line[j + 1]) {
-                    mergedLine[index++] = line[j] * 2;
-                    score += line[j] * 2;
-                    j++; // Skip next tile
-                } else {
-                    mergedLine[index++] = line[j];
-                }
-            }
-    
-            // Update the grid
-            index = 0;
-            for (int j = 0; j < SIZE; j++) {
-                int row = rowStart + (rowInc == 0 ? i : j);
-                int col = colStart + (colInc == 0 ? i : j);
-                if (row >= 0 && row < SIZE && col >= 0 && col < SIZE) {
-                    if (grid[row][col] != mergedLine[index]) {
-                        grid[row][col] = mergedLine[index++];
-                        changed = true;
-                    } else {
-                        index++;
-                    }
-                }
+    private void merge(int[] line, int direction) {
+        int[] temp = new int[SIZE];
+        int index = direction == -1 ? 0 : SIZE - 1;
+        int step = direction == -1 ? 1 : -1;
+
+        for (int i = 0; i < SIZE; i++) {
+            int value = line[i];
+            if (value == 0) continue;
+            if (temp[index] == value) {
+                temp[index] += value;
+                score += temp[index];
+                index += step;
+            } else if (temp[index] == 0) {
+                temp[index] = value;
+            } else {
+                index += step;
+                temp[index] = value;
             }
         }
-        return changed;
-    }    
+        System.arraycopy(temp, 0, line, 0, SIZE);
+    }
+
+    private void finalizeMove() {
+        addRandomTile();
+    }
 
     public void addRandomTile() {
         int emptyCount = 0;
@@ -125,6 +103,7 @@ public final class GameLogic {
             }
         }
         if (emptyCount == 0) return;
+
         int target = random.nextInt(emptyCount);
         int count = 0;
         for (int i = 0; i < SIZE; i++) {
@@ -149,5 +128,20 @@ public final class GameLogic {
             }
         }
         return true;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int[] row : grid) {
+            for (int val : row) {
+                sb.append(val).append("\t");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public void printGrid() {
+        System.out.println(this.toString());
     }
 }
