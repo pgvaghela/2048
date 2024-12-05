@@ -47,18 +47,16 @@ public class GameUI extends JFrame {
     }
 
     private void refresh() {
-        System.out.println("Refreshing UI...");
         int[][] grid = gameLogic.getGrid();
         Component[] components = gamePanel.getComponents();
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 int componentIndex = i * grid.length + j;
                 Tile tile = (Tile) components[componentIndex];
-                tile.setValue(grid[i][j]); // Update tile value
+                tile.setValue(grid[i][j]);
             }
         }
         scoreLabel.setText("Score: " + gameLogic.getScore());
         gamePanel.repaint();
-    }        
-
+    }
 }

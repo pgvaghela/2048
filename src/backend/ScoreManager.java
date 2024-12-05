@@ -6,7 +6,7 @@ public class ScoreManager {
 
     public ScoreManager() {
         score = 0;
-        highScore = 0; // We could load high score from file (optional).
+        highScore = 0; // Optionally load from file
     }
 
     public int getScore() {
@@ -29,6 +29,6 @@ public class ScoreManager {
     }
 
     public void saveHighScore() {
-        // Save high score to file (optional).
+        // Implement file save logic if required
     }
 }
