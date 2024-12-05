@@ -5,7 +5,7 @@ import java.util.Random;
 public final class GameLogic {
     private final int[][] grid;
     private static final int SIZE = 4;
-    private Random random;
+    private final Random random;
     private int score;
 
     public GameLogic() {
@@ -130,6 +130,7 @@ public final class GameLogic {
         return true;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int[] row : grid) {

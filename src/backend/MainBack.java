@@ -3,6 +3,7 @@ package backend;
 import java.util.Scanner;
 
 public class MainBack {
+    @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) {
         GameLogic game = new GameLogic();
         ScoreManager scoreManager = new ScoreManager();
