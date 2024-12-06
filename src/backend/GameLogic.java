@@ -5,7 +5,7 @@ import java.util.Random;
 public final class GameLogic {
     private final int[][] grid;
     private static final int SIZE = 4;
-    private final Random random;
+    private Random random;
     private int score;
 
     public GameLogic() {
@@ -24,32 +24,54 @@ public final class GameLogic {
         return score;
     }
 
-    public void up() {
+    public boolean move(String direction) {
+        int[][] previousState = copyGrid(grid); // Save the current grid state
+        int previousScore = score; // Save the current score
+
+        boolean moved = switch (direction) {
+            case "UP" -> moveUp();
+            case "DOWN" -> moveDown();
+            case "LEFT" -> moveLeft();
+            case "RIGHT" -> moveRight();
+            default -> false;
+        };
+
+        if (moved && !isGridEqual(previousState, grid)) { // Check if any movement or merging happened
+            addRandomTile(); // Add a new random tile only if a valid move occurred
+            return true;
+        } else {
+            // Revert the score if no new tile is generated
+            score = previousScore;
+            return false;
+        }
+    }
+
+    private boolean moveUp() {
         for (int col = 0; col < SIZE; col++) {
             moveColumn(col, -1);
         }
-        finalizeMove();
+        return true;
     }
 
-    public void down() {
+    private boolean moveDown() {
         for (int col = 0; col < SIZE; col++) {
             moveColumn(col, 1);
         }
-        finalizeMove();
+        return true;
     }
 
-    public void left() {
+    private boolean moveLeft() {
         for (int row = 0; row < SIZE; row++) {
             moveRow(row, -1);
         }
-        finalizeMove();
+        return true;
     }
 
-    public void right() {
+    private boolean moveRight() {
         for (int row = 0; row < SIZE; row++) {
             moveRow(row, 1);
         }
-        finalizeMove();
+        return true;
     }
 
     private void moveColumn(int col, int direction) {
@@ -79,7 +101,7 @@ public final class GameLogic {
             if (value == 0) continue;
             if (temp[index] == value) {
                 temp[index] += value;
-                score += temp[index];
+                score += temp[index]; // Update score only during merging
                 index += step;
             } else if (temp[index] == 0) {
                 temp[index] = value;
@@ -91,25 +113,46 @@ public final class GameLogic {
         System.arraycopy(temp, 0, line, 0, SIZE);
     }
 
-    private void finalizeMove() {
-        addRandomTile();
+    private int[][] copyGrid(int[][] source) {
+        int[][] copy = new int[source.length][source[0].length];
+        for (int i = 0; i < source.length; i++) {
+            System.arraycopy(source[i], 0, copy[i], 0, source[i].length);
+        }
+        return copy;
+    }
+
+    private boolean isGridEqual(int[][] grid1, int[][] grid2) {
+        for (int i = 0; i < grid1.length; i++) {
+            for (int j = 0; j < grid1[i].length; j++) {
+                if (grid1[i][j] != grid2[i][j]) {
+                    return false; // Grids are not the same
+                }
+            }
+        }
+        return true; // Grids are identical
     }
 
     public void addRandomTile() {
         int emptyCount = 0;
+
+        // Count empty tiles
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (grid[i][j] == 0) emptyCount++;
             }
         }
+
+        // If no empty tiles are available, return
         if (emptyCount == 0) return;
 
+        // Select a random empty position
         int target = random.nextInt(emptyCount);
         int count = 0;
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (grid[i][j] == 0) {
                     if (count == target) {
+                        // Assign new tile value: 2 with 90% probability, 4 with 10% probability
                         grid[i][j] = random.nextInt(10) < 9 ? 2 : 4;
                         return;
                     }
@@ -130,7 +173,6 @@ public final class GameLogic {
         return true;
     }
 
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int[] row : grid) {

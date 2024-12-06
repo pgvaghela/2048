@@ -12,33 +12,23 @@ public class MainBack {
 
         System.out.println("Welcome to 2048!");
         System.out.println("Controls: W (Up), S (Down), A (Left), D (Right), Q (Quit)");
+        System.out.println("Initial Board:");
         game.printGrid();
 
         while (gameRunning) {
             System.out.print("Enter your move: ");
             String input = scanner.nextLine().toUpperCase();
 
+            boolean validMove = false;
             switch (input) {
-                case "W" -> {
-                    game.up();
-                    scoreManager.addScore(game.getScore());
-                }
-                case "S" -> {
-                    game.down();
-                    scoreManager.addScore(game.getScore());
-                }
-                case "A" -> {
-                    game.left();
-                    scoreManager.addScore(game.getScore());
-                }
-                case "D" -> {
-                    game.right();
-                    scoreManager.addScore(game.getScore());
-                }
+                case "W" -> validMove = game.move("UP");
+                case "S" -> validMove = game.move("DOWN");
+                case "A" -> validMove = game.move("LEFT");
+                case "D" -> validMove = game.move("RIGHT");
                 case "Q" -> {
                     gameRunning = false;
                     System.out.println("Thanks for playing!");
-                    break;
+                    continue;
                 }
                 default -> {
                     System.out.println("Invalid input. Use W, A, S, D to move or Q to quit.");
@@ -46,8 +36,10 @@ public class MainBack {
                 }
             }
 
-            if (!input.equals("Q")) {
-                game.printGrid();
+            if (validMove) {
+                scoreManager.addScore(game.getScore());
+                System.out.println("Current Board:");
+                game.printGrid(); // Print grid after a valid move
                 System.out.println("Current Score: " + scoreManager.getScore());
                 System.out.println("High Score: " + scoreManager.getHighScore());
 
@@ -55,6 +47,8 @@ public class MainBack {
                     System.out.println("Game Over! No more moves are possible.");
                     gameRunning = false;
                 }
+            } else if (!input.equals("Q")) {
+                System.out.println("No valid move. Try a different direction.");
             }
         }
 

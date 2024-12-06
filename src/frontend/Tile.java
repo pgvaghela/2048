@@ -10,7 +10,7 @@ public class Tile extends JPanel {
         this.value = value;
         setPreferredSize(new Dimension(100, 100));
         setBackground(getTileColor(value));
-        setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        setBorder(BorderFactory.createLineBorder(new Color(0xCCC0B3)));
     }
 
     public void setValue(int value) {
@@ -32,7 +32,7 @@ public class Tile extends JPanel {
             case 512 -> new Color(0xEDC850);
             case 1024 -> new Color(0xEDC53F);
             case 2048 -> new Color(0xEDC22E);
-            default -> Color.LIGHT_GRAY;
+            default -> new Color(0xCDC1B4);
         };
     }
 

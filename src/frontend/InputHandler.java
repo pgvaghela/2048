@@ -15,15 +15,12 @@ public class InputHandler extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        boolean moved = false;
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP -> moved = gameLogic.move("UP");
-            case KeyEvent.VK_DOWN -> moved = gameLogic.move("DOWN");
-            case KeyEvent.VK_LEFT -> moved = gameLogic.move("LEFT");
-            case KeyEvent.VK_RIGHT -> moved = gameLogic.move("RIGHT");
+            case KeyEvent.VK_UP -> gameLogic.up();
+            case KeyEvent.VK_DOWN -> gameLogic.down();
+            case KeyEvent.VK_LEFT -> gameLogic.left();
+            case KeyEvent.VK_RIGHT -> gameLogic.right();
         }
-        if (moved) {
-            onMove.run();
-        }
+        onMove.run();
     }
 }
