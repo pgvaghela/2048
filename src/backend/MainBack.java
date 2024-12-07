@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class MainBack {
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) {
-        GameLogic game = new GameLogic();
+        GameLogic game = new GameLogic(4);
         ScoreManager scoreManager = new ScoreManager();
         Scanner scanner = new Scanner(System.in);
         boolean gameRunning = true;
