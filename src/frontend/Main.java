@@ -1,7 +1,12 @@
 package frontend;
+
+import javax.swing.SwingUtilities;
+
 public class Main {
     public static void main(String[] args) {
-        new GameUI();
-        System.out.println("Game is running!");
+        SwingUtilities.invokeLater(() -> {
+            GameUI gameUI = new GameUI();
+            gameUI.setVisible(true);
+        });
     }
 }

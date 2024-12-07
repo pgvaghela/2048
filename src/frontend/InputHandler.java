@@ -7,10 +7,12 @@ import java.awt.event.KeyEvent;
 public class InputHandler extends KeyAdapter {
     private final GameLogic gameLogic;
     private final Runnable onMove;
+    private final Runnable playMoveSound;
 
-    public InputHandler(GameLogic gameLogic, Runnable onMove) {
+    public InputHandler(GameLogic gameLogic, Runnable onMove, Runnable playMoveSound) {
         this.gameLogic = gameLogic;
         this.onMove = onMove;
+        this.playMoveSound = playMoveSound;
     }
 
     @Override
@@ -23,7 +25,8 @@ public class InputHandler extends KeyAdapter {
             case KeyEvent.VK_RIGHT -> moved = gameLogic.move("RIGHT");
         }
         if (moved) {
-            onMove.run(); // Trigger UI refresh if a move occurred
+            playMoveSound.run();
+            onMove.run();
         }
     }
 }

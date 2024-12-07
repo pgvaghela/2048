@@ -4,12 +4,13 @@ import java.util.Random;
 
 public final class GameLogic {
     private final int[][] grid;
-    private static final int SIZE = 4;
+    private final int size; // Dynamic grid size
     private final Random random;
     private int score;
 
-    public GameLogic() {
-        grid = new int[SIZE][SIZE];
+    public GameLogic(int size) {
+        this.size = size; // Set the grid size dynamically
+        grid = new int[size][size];
         random = new Random();
         reset(); // Initialize the game
     }
@@ -45,40 +46,40 @@ public final class GameLogic {
     }
 
     private boolean moveUp() {
-        for (int col = 0; col < SIZE; col++) {
+        for (int col = 0; col < size; col++) {
             moveColumn(col, -1); // Move each column upward
         }
         return true;
     }
 
     private boolean moveDown() {
-        for (int col = 0; col < SIZE; col++) {
+        for (int col = 0; col < size; col++) {
             moveColumn(col, 1); // Move each column downward
         }
         return true;
     }
 
     private boolean moveLeft() {
-        for (int row = 0; row < SIZE; row++) {
+        for (int row = 0; row < size; row++) {
             moveRow(row, -1); // Move each row left
         }
         return true;
     }
 
     private boolean moveRight() {
-        for (int row = 0; row < SIZE; row++) {
+        for (int row = 0; row < size; row++) {
             moveRow(row, 1); // Move each row right
         }
         return true;
     }
 
     private void moveColumn(int col, int direction) {
-        int[] column = new int[SIZE];
-        for (int row = 0; row < SIZE; row++) {
+        int[] column = new int[size];
+        for (int row = 0; row < size; row++) {
             column[row] = grid[row][col];
         }
         merge(column, direction);
-        for (int row = 0; row < SIZE; row++) {
+        for (int row = 0; row < size; row++) {
             grid[row][col] = column[row];
         }
     }
@@ -91,11 +92,11 @@ public final class GameLogic {
 
     private void merge(int[] line, int direction) {
         // Step 1: Slide non-zero tiles
-        int[] temp = new int[SIZE];
-        int index = direction == -1 ? 0 : SIZE - 1;
+        int[] temp = new int[size];
+        int index = direction == -1 ? 0 : size - 1;
         int step = direction == -1 ? 1 : -1;
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             int value = line[i];
             if (value != 0) {
                 temp[index] = value;
@@ -104,10 +105,10 @@ public final class GameLogic {
         }
 
         // Step 2: Merge tiles with the same value
-        index = direction == -1 ? 0 : SIZE - 1;
+        index = direction == -1 ? 0 : size - 1;
         step = direction == -1 ? 1 : -1;
 
-        for (int i = 0; i < SIZE - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
             int current = temp[index];
             int next = temp[index + step];
 
@@ -123,10 +124,10 @@ public final class GameLogic {
         }
 
         // Step 3: Slide again to fill gaps after merging
-        int[] finalTemp = new int[SIZE];
-        index = direction == -1 ? 0 : SIZE - 1;
+        int[] finalTemp = new int[size];
+        index = direction == -1 ? 0 : size - 1;
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             int value = temp[i];
             if (value != 0) {
                 finalTemp[index] = value;
@@ -134,7 +135,7 @@ public final class GameLogic {
             }
         }
 
-        System.arraycopy(finalTemp, 0, line, 0, SIZE);
+        System.arraycopy(finalTemp, 0, line, 0, size);
     }
 
     private int[][] copyGrid(int[][] source) {
@@ -160,8 +161,8 @@ public final class GameLogic {
         int emptyCount = 0;
 
         // Count empty tiles
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (grid[i][j] == 0) emptyCount++;
             }
         }
@@ -172,8 +173,8 @@ public final class GameLogic {
         // Select a random empty position
         int target = random.nextInt(emptyCount);
         int count = 0;
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (grid[i][j] == 0) {
                     if (count == target) {
                         // Assign new tile value: 2 with 90% probability, 4 with 10% probability
@@ -187,8 +188,8 @@ public final class GameLogic {
     }
 
     public boolean isGameOver() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (grid[i][j] == 0) return false;
                 if (i > 0 && grid[i][j] == grid[i - 1][j]) return false;
                 if (j > 0 && grid[i][j] == grid[i][j - 1]) return false;
@@ -215,8 +216,8 @@ public final class GameLogic {
 
     public void reset() {
         // Clear the grid
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 grid[i][j] = 0;
             }
         }
