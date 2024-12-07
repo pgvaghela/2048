@@ -10,7 +10,7 @@ class GameLogicTest {
 
     void testConstructorInitialization() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         assertEquals(0, gameLog.getScore());
 
@@ -42,7 +42,7 @@ class GameLogicTest {
 
     void testAddRandomTile() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         gameLog.addRandomTile(); // Should add one more tile
 
@@ -70,7 +70,7 @@ class GameLogicTest {
 
     void testAddRandomTileWithNoOpenSpaces() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         // Fill the grid completely with values
         int[][] testGrid = gameLog.getGrid();
@@ -109,7 +109,7 @@ class GameLogicTest {
 
     void testIsGameOver() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         assertFalse(gameLog.isGameOver()); // Initially, the game should not be over
 
@@ -135,7 +135,7 @@ class GameLogicTest {
     @Test
     void testMoveUpWithMerge() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         int[][] testGrid = gameLog.getGrid();
 
@@ -163,7 +163,7 @@ class GameLogicTest {
 
     void testMoveRightWithMerge() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         int[][] testGrid = gameLog.getGrid();
 
@@ -191,7 +191,7 @@ class GameLogicTest {
 
     void testMoveLeftWithMerge() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         int[][] testGrid = gameLog.getGrid();
 
@@ -219,7 +219,7 @@ class GameLogicTest {
 
     void testMoveDownWithMerge() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         int[][] testGrid = gameLog.getGrid();
 
@@ -246,7 +246,7 @@ class GameLogicTest {
     // The following are tests to ensure that moves performed where no tiles merge move to their correct positions
     @Test
     void testMoveUpWithNoMerge() {
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         clearGrid(testGrid);
         for (int col = 0; col < testGrid[0].length; col++) {
@@ -265,7 +265,7 @@ class GameLogicTest {
 
     @Test
     void testMoveRightWithNoMerge() {
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         clearGrid(testGrid);
         for (int col = 0; col < testGrid[0].length; col++) {
@@ -284,7 +284,7 @@ class GameLogicTest {
 
     @Test
     void testMoveDownWithNoMerge() {
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         clearGrid(testGrid);
         for (int col = 0; col < testGrid[0].length; col++) {
@@ -303,7 +303,7 @@ class GameLogicTest {
 
     @Test
     void testMoveLeftWithNoMerge() {
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         clearGrid(testGrid);
         for (int col = 0; col < testGrid[0].length; col++) {
@@ -324,8 +324,8 @@ class GameLogicTest {
     @Test
     void testMoveUpWithNoValidMove() {
     	
-    	GameLogic gameLog = new GameLogic();
-    	GameLogic gameLog2 = new GameLogic();
+    	GameLogic gameLog = new GameLogic(4);
+    	GameLogic gameLog2 = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         int[][] testGrid2 = gameLog2.getGrid();
         clearGrid(testGrid);
@@ -350,8 +350,8 @@ class GameLogicTest {
     
     @Test
     void testMoveDownWithNoValidMove() {
-    	GameLogic gameLog = new GameLogic();
-    	GameLogic gameLog2 = new GameLogic();
+    	GameLogic gameLog = new GameLogic(4);
+    	GameLogic gameLog2 = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         int[][] testGrid2 = gameLog2.getGrid();
         clearGrid(testGrid);
@@ -376,8 +376,8 @@ class GameLogicTest {
     
     @Test
     void testMoveRightWithNoValidMove() {
-    	GameLogic gameLog = new GameLogic();
-    	GameLogic gameLog2 = new GameLogic();
+    	GameLogic gameLog = new GameLogic(4);
+    	GameLogic gameLog2 = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         int[][] testGrid2 = gameLog2.getGrid();
         clearGrid(testGrid);
@@ -402,8 +402,8 @@ class GameLogicTest {
     
     @Test
     void testMoveLeftWithNoValidMove() {
-    	GameLogic gameLog = new GameLogic();
-    	GameLogic gameLog2 = new GameLogic();
+    	GameLogic gameLog = new GameLogic(4);
+    	GameLogic gameLog2 = new GameLogic(4);
         int[][] testGrid = gameLog.getGrid();
         int[][] testGrid2 = gameLog2.getGrid();
         clearGrid(testGrid);
@@ -430,7 +430,7 @@ class GameLogicTest {
     @Test
     void testToStringOutput() {
 
-        GameLogic gameLog = new GameLogic();
+        GameLogic gameLog = new GameLogic(4);
 
         String boardString = gameLog.toString();
 
