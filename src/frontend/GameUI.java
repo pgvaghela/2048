@@ -15,7 +15,7 @@ public class GameUI extends JFrame {
 
     public GameUI() {
         audioManager = new AudioManager();
-        audioManager.playBackgroundMusic("/Users/priyanshvaghela/Documents/2048/src/resources/spark-of-inspiration.wav");
+        audioManager.playBackgroundMusic("/resources/spark-of-inspiration.wav");
 
         setTitle("2048 Game");
         setSize(500, 600);
@@ -91,9 +91,12 @@ public class GameUI extends JFrame {
         InputHandler inputHandler = new InputHandler(
             gameLogic,
             this::onMove,
-            () -> audioManager.playSoundEffect("/Users/priyanshvaghela/Documents/2048/src/resources/mixkit-modern-technology-select-3124.wav")
+            () -> audioManager.playSoundEffect("/resources/mixkit-modern-technology-select-3124.wav")
         );
         addKeyListener(inputHandler);
+
+        audioManager.stopBackgroundMusic();
+        audioManager.playBackgroundMusic("/resources/spark-of-inspiration.wav");
 
         setFocusable(true);
         revalidate();
@@ -143,7 +146,7 @@ public class GameUI extends JFrame {
     private void onMove() {
         refresh();
         if (gameLogic.isGameOver()) {
-            audioManager.playSoundEffect("/Users/priyanshvaghela/Documents/2048/src/resources/game-over-38511.wav");
+            audioManager.playSoundEffect("/resources/game-over-38511.wav");
             audioManager.stopBackgroundMusic();
 
             // Display Game Over Overlay
