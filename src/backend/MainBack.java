@@ -54,7 +54,6 @@ public class MainBack {
 
         System.out.println("Final Score: " + scoreManager.getScore());
         System.out.println("High Score: " + scoreManager.getHighScore());
-        scoreManager.saveHighScore();
         scanner.close();
     }
 }
